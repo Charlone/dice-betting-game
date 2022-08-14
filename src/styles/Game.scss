@@ -21,11 +21,11 @@
     }
 
     #win {
-      fill: #46FFBA;
+      filter: invert(.3)sepia(1) saturate(5) hue-rotate(100deg);
     }
 
     #loss {
-      fill: #000000;
+      filter: invert(1);
     }
 
     .win-amount {
