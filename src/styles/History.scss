@@ -1,0 +1,63 @@
+.history-container {
+  min-height: 100vh;
+
+  .history-section {
+    .balance {
+      text-align: center;
+      margin: 32px 0;
+      font-weight: bold;
+      font-size: 32px;
+    }
+  }
+
+  .history-details {
+    .history-title {
+      font-weight: bold;
+      font-size: 32px;
+      margin: 0 0 24px 16px;
+    }
+
+    .table {
+      width: -webkit-fill-available;
+
+      .table-row {
+        height: 64px;
+
+        td {
+          vertical-align: middle;
+        }
+
+        .generated-dice, .dice-selected {
+          width: 16px;
+          height: 16px;
+          margin: 0 24px;
+        }
+
+        .row-wrapped {
+          font-weight: normal;
+          font-size: 14px;
+
+
+          p {
+            font-size: 8px;
+            opacity: 0.6;
+          }
+        }
+
+        .outcome {
+          font-weight: normal;
+          font-size: 12px;
+
+          &.win {
+            color: #46FFBA;
+          }
+        }
+
+        .balance {
+          font-weight: normal;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

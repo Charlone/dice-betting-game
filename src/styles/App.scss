@@ -1,0 +1,12 @@
+// reset scss
+@use 'scss-reset/_reset.scss';
+@use "Header";
+@use "Game";
+@use "Button";
+@use "History";
+
+// global app styling
+#app {
+  background-color: #5b15c5;
+  color: #fff;
+}

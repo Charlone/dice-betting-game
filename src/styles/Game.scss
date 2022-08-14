@@ -1,0 +1,127 @@
+.game {
+  min-height: calc(100vh - 64px);
+  padding: 32px 0 0 0;
+
+  .game-section {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 207px;
+
+    .logo {
+      width: 124px;
+      height: 124px;
+    }
+
+    .dice {
+      width: 124px;
+      height: 124px;
+    }
+
+    #win {
+      fill: #46FFBA;
+    }
+
+    #loss {
+      fill: #000000;
+    }
+
+    .win-amount {
+      margin: 32px 0 0 0;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .outcome {
+      font-weight: normal;
+      font-size: 12px;
+
+      &.loss {
+        position: absolute;
+        bottom: 0;
+      }
+    }
+  }
+
+  .user-input-section {
+    width: -webkit-fill-available;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+
+    .game-panel {
+      .game-form {
+        .info-message {
+          margin: 16px 0 0 0;
+          font-weight: normal;
+          font-size: 10px;
+          opacity: 0.4;
+          text-align: center;
+        }
+
+        .dice {
+          margin: 16px 0 0 0;
+          display: flex;
+          flex-wrap: nowrap;
+          flex-direction: row;
+          justify-content: center;
+          align-content: center;
+          align-items: center;
+
+          img:not(img:first-child) {
+            margin: 0 0 0 12px;
+          }
+
+          img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            pointer-events: all;
+          }
+
+          .dice-start-color, .selected, .not-selected {
+            fill: #fff;
+          }
+
+          .not-selected {
+            opacity: 0.1;
+          }
+
+          .dice-face {
+            display: none;
+          }
+        }
+
+        .bet-amount-container {
+          min-width: 100%;
+          display: flex;
+          flex-wrap: nowrap;
+          flex-direction: row;
+          justify-content: space-evenly;
+          align-items: center;
+          align-content: center;
+          margin: 40px 0 0 0;
+
+          .bet-decrement, .bet-increment {
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            pointer-events: all;
+          }
+
+          .bet-amount {
+            font-size: 32px;
+            font-weight: bold;
+          }
+
+          .range-input {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
