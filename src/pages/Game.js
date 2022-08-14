@@ -7,14 +7,17 @@ import minus from "../assets/minus.svg";
 import plus from "../assets/plus.svg";
 
 const Game = ({username, balance}) => {
+    // state vars needed for component
     const [dice, setDice] = useState(false);
     const [isWin, setIsWin] = useState(false);
     const [selected, setSelected] = useState("");
     const [betAmount, setBetAmount] = useState(1);
 
+    // component that renders dice images with events
     const RenderDice = () => {
         let diceFaces = [];
 
+        // dice has 6 faces, loop fetches all the faces values
         for (let i = 1; i <= 6; i++) {
             let diceObject = {
                 key: i,
@@ -24,6 +27,7 @@ const Game = ({username, balance}) => {
             diceFaces.push(diceObject);
         }
 
+        // mapping the values from the loop to array with images to render
         const diceArray = diceFaces.map(diceFace => (
             <img
                 key={diceFace.key}
@@ -34,43 +38,51 @@ const Game = ({username, balance}) => {
             />
         ));
 
+        // return the images elements to render
         return diceArray;
     }
 
+    // the handler for setting dice chosen by the user on click
     function handleDiceSetting(diceChosen) {
+        // if dice is not already chosen set it as selected
         if (selected !== diceChosen) {
             setSelected(diceChosen);
-            console.log("selected", diceChosen);
         }
     }
 
+    // the handler for incrementing the amount to bet on arrow click
     function handleIncrementBet() {
+        // if there is enough balance add 1 to bet amount
         if (balance >= (betAmount + 1)) {
-            console.log('Increment bet');
             setBetAmount(betAmount + 1);
         }
     }
 
+    // the handler for decrementing the amount to bet on arrow click
     function handleDecrementBet() {
-        if (betAmount > 1 && balance >= betAmount) {
-            console.log('Decrement bet');
+        // if balance is not finished and balance has enough money and bet is greater than 1 allow decrement
+        if (betAmount > 1 && balance >= betAmount && balance > 0) {
             setBetAmount(betAmount - 1)
         }
     }
 
+    // the handler for the form submit
     async function handleSubmit(e) {
+        // prevent form submit
         e.preventDefault();
+        // get the data from the form
         const { diceFace, bet } = e.target;
+        //set the data object to send
         const data = {
             username,
             sideSelected: +diceFace.value,
             betAmount: +bet.value,
         }
 
+        // post the data and set values from return
         try {
             await axios.post("http://localhost:3000/roll-dice/", data)
                 .then(function (response) {
-                    console.log(response);
                     setDice(response.data.result === 'LOST' ? response.data.sideGenerated : diceFace.value);
                     setIsWin(response.data.result === "WON");
                 })
@@ -92,7 +104,6 @@ const Game = ({username, balance}) => {
                                 className={"dice"}
                                 src={require(`../assets/dice${dice}.svg`)}
                                 alt={"Dice Toss"}
-                                // style={isWin ? {fill: '#46FFBA'} : {fill: '#000'}}
                             />
                             {isWin && <h1 className={"win-amount"}>{((betAmount * 5) - betAmount)}</h1>}
                             <span className={isWin ? "outcome" : "outcome loss"}>{isWin ? "WIN" : "LOSS"}</span>

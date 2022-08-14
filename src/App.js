@@ -6,15 +6,19 @@ import History from "./pages/History";
 import "./styles/App.scss";
 
 const App = () => {
+    // set state variable needed
     const [user, setUser] = useState('robouser');
     const [balance, setBalance] = useState(0);
     const [betHistory, setBetHistory] = useState(null);
 
+    // get user data needed by the app
     useEffect(() => {
         let isMounted = true;
-        axios.get(`http://localhost:3000/get-user/${user}`)
-            .then(response => {
-                if (isMounted) {
+
+        // if app is mounted get the data from server using the mock user and data for this project
+        if (isMounted) {
+            axios.get(`http://localhost:3000/get-user/${user}`)
+                .then(response => {
                     setBalance(response.data.balance);
                     setBetHistory(response.data.betHistory);
                     setUser(response.data.username);
@@ -22,12 +26,14 @@ const App = () => {
                     if (!localStorage.getItem('start-balance')) {
                         localStorage.setItem('start-balance', response.data.balance);
                     }
-                }
-            });
+                });
+        }
 
+        // clean up phase to ensure no updates are done while unmounted
         return () => {isMounted = false}
     }, [balance, betHistory]);
 
+    // app react dom router routes
     return (
         <BrowserRouter>
             <Switch>
@@ -39,7 +45,7 @@ const App = () => {
                 </Route>
             </Switch>
         </BrowserRouter>
-    )
+    );
 }
 
 export default App;

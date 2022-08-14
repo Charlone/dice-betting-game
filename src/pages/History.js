@@ -4,14 +4,24 @@ import axios from "axios";
 import Header from "../components/common/Header";
 
 const History = ({balance, username}) => {
+    // state vars needed by the component
     const [betHistory, setBetHistory] = useState([]);
+    // set the start balance to reconstruct the balances at each play
     const userStartBalance = localStorage.getItem('start-balance');
+    // the var to do the sum for the balance at each round
     let balanceChange = 0;
 
+    // get the data from server
     useEffect(() => {
         axios.get(`http://localhost:3000/get-user/${username}`)
             .then(response => {
+                // add balance to response data with workings on how much was the balance at each round
                 response.data.betHistory.forEach((row, index) => {
+                    // if user lost reduce stake amount from his balance,
+                    // however if player won we add win amount less the stake to the balance
+                    // since we are doing (userStartBalance - balanceChange) we need to invert
+                    // as - - makes + and - + makes -
+                    // we also do the calculation after the first setup so as not to affect the first balance started with
                     (row.result === 'LOST')
                         ? balanceChange += row.stake
                         : balanceChange -= (row.amountWon - row.stake);
@@ -19,25 +29,30 @@ const History = ({balance, username}) => {
                     row['balance'] = (userStartBalance - balanceChange);
                 })
 
+                // sorting the data so that the latest bets are presented first
                 let sortedHistoryData = response.data.betHistory.sort((x, y) => {
                     if (x.dateTime > y.dateTime) {
                         return -1;
                     }
                 });
 
+                // storing the data to the var
                 setBetHistory(sortedHistoryData);
             });
     }, []);
 
+    // helper function to convert timestamp into human readable string
     const dateFormatter = (date) => {
         const dateToFormat = new Date(date);
 
         return dateToFormat.toISOString().replace('T', ' ').replace('Z', '').substring(0, 19);
     }
 
+    // the component that renders the transaction rows of each bet played
     const HistoryDataTable = ({betHistory}) => {
         let data = [];
 
+        // looping over the bet data and setting html to be injected in componenet
         betHistory.forEach((row, index) => {
             data.push(
                 <tr className={"table-row"} key={index}>
@@ -59,6 +74,7 @@ const History = ({balance, username}) => {
             )
         })
 
+        // return the component data
         return data;
     }
 

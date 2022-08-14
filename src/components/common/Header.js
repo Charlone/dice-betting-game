@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import leftArrow from  "../../assets/left-arrow.svg";
 
 const Header = ({balance}) => {
+    // the location var to use for displaying the back arrow
     const location = useLocation();
 
     return (
