@@ -5,11 +5,21 @@ import Header from "../components/common/Header";
 
 const History = ({balance, username}) => {
     const [betHistory, setBetHistory] = useState([]);
+    const userStartBalance = localStorage.getItem('start-balance');
+    let balanceChange = 0;
 
     useEffect(() => {
         axios.get(`http://localhost:3000/get-user/${username}`)
             .then(response => {
-                let sortedHistoryData = response.data.betHistory.sort(function(x, y) {
+                response.data.betHistory.forEach((row, index) => {
+                    (row.result === 'LOST')
+                        ? balanceChange += row.stake
+                        : balanceChange -= (row.amountWon - row.stake);
+
+                    row['balance'] = (userStartBalance - balanceChange);
+                })
+
+                let sortedHistoryData = response.data.betHistory.sort((x, y) => {
                     if (x.dateTime > y.dateTime) {
                         return -1;
                     }
@@ -25,9 +35,8 @@ const History = ({balance, username}) => {
         return dateToFormat.toISOString().replace('T', ' ').replace('Z', '').substring(0, 19);
     }
 
-    const HistoryDataTable = ({betHistory, balance}) => {
+    const HistoryDataTable = ({betHistory}) => {
         let data = [];
-        let balanceToDecrease = 0;
 
         betHistory.forEach((row, index) => {
             data.push(
@@ -44,19 +53,10 @@ const History = ({balance, username}) => {
                     <td>
                         <img className={'dice-selected'} alt={'dice'} src={require(`../assets/dice${row.sideSelected}.svg`)}/>
                     </td>
-                    <td className={row.result === "WON" ? "outcome win" : "outcome"}>{row.result === 'LOST' ? `-${row.stake}` : `+${row.amountWon}`}</td>
-                    <td className={"balance"}>{balance - balanceToDecrease}</td>
+                    <td className={row.result === "WON" ? "outcome win" : "outcome"}>{row.result === 'LOST' ? `-${row.stake}` : `+${row.amountWon - row.stake}`}</td>
+                    <td className={"balance"}>{row.balance}</td>
                 </tr>
             )
-
-            // reset balanceToDecrease since balance sum already happened and get ready for next round
-            balanceToDecrease = 0;
-
-            if (row.result === 'LOST') {
-                balanceToDecrease += row.stake
-            } else {
-                balanceToDecrease -= row.amountWon
-            }
         })
 
         return data;
@@ -85,7 +85,7 @@ const History = ({balance, username}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <HistoryDataTable betHistory={betHistory} balance={balance} />
+                        <HistoryDataTable betHistory={betHistory} />
                     </tbody>
                 </table>
             </section>

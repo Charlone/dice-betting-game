@@ -18,6 +18,10 @@ const App = () => {
                     setBalance(response.data.balance);
                     setBetHistory(response.data.betHistory);
                     setUser(response.data.username);
+
+                    if (!localStorage.getItem('start-balance')) {
+                        localStorage.setItem('start-balance', response.data.balance);
+                    }
                 }
             });
 

@@ -1,3 +1,5 @@
 node_modules/
+backend-endpoints/node_modules
 .idea/
 README-PRIVATE.md
+design/

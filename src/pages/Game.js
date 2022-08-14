@@ -94,7 +94,7 @@ const Game = ({username, balance}) => {
                                 alt={"Dice Toss"}
                                 // style={isWin ? {fill: '#46FFBA'} : {fill: '#000'}}
                             />
-                            {isWin && <h1 className={"win-amount"}>{(betAmount * 5)}</h1>}
+                            {isWin && <h1 className={"win-amount"}>{((betAmount * 5) - betAmount)}</h1>}
                             <span className={isWin ? "outcome" : "outcome loss"}>{isWin ? "WIN" : "LOSS"}</span>
                         </>
                     )}
