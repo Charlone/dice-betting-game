@@ -7,6 +7,7 @@ process.env.NODE_ENV = "development";
 
 module.exports = {
   entry: path.resolve(__dirname, './src/index.js'),
+  devtool: "cheap-module-source-map",
   module: {
     rules: [
       {
