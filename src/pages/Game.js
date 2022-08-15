@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 import logo from "../assets/dice-logo.svg";
 import minus from "../assets/minus.svg";
 import plus from "../assets/plus.svg";
+import {setToast} from "../components/common/Toast";
 
 const Game = ({username, balance}) => {
     // state vars needed for component
     const [dice, setDice] = useState(false);
     const [isWin, setIsWin] = useState(false);
+    const [winAmount, setWinAmount] = useState(0);
     const [selected, setSelected] = useState("");
     const [betAmount, setBetAmount] = useState(1);
 
@@ -55,14 +58,18 @@ const Game = ({username, balance}) => {
         // if there is enough balance add 1 to bet amount
         if (balance >= (betAmount + 1)) {
             setBetAmount(betAmount + 1);
+        } else {
+            setToast('error', 'Not enough balance to increment bet');
         }
     }
 
     // the handler for decrementing the amount to bet on arrow click
     function handleDecrementBet() {
-        // if balance is not finished and balance has enough money and bet is greater than 1 allow decrement
-        if (betAmount > 1 && balance >= betAmount && balance > 0) {
+        // bet amount must be greater than 1 as 0 cannot be played and balance must be greater than 0
+        if (betAmount > 1 && balance > 0) {
             setBetAmount(betAmount - 1)
+        } else {
+            setToast('error', 'Bet amount cannot be less than 1');
         }
     }
 
@@ -85,6 +92,7 @@ const Game = ({username, balance}) => {
                 .then(function (response) {
                     setDice(response.data.result === 'LOST' ? response.data.sideGenerated : diceFace.value);
                     setIsWin(response.data.result === "WON");
+                    setWinAmount(((betAmount * 5) - betAmount));
                 })
         } catch (e) {
             console.error(e);
@@ -93,6 +101,7 @@ const Game = ({username, balance}) => {
 
     return (
         <main className={"app-container"}>
+            <ToastContainer theme={"colored"} />
             <Header balance={balance} />
             <section className={"game"}>
                 <section className={"game-section"}>
@@ -105,7 +114,7 @@ const Game = ({username, balance}) => {
                                 src={require(`../assets/dice${dice}.svg`)}
                                 alt={"Dice Toss"}
                             />
-                            {isWin && <h1 className={"win-amount"}>{((betAmount * 5) - betAmount)}</h1>}
+                            {isWin && <h1 className={"win-amount"}>{winAmount}</h1>}
                             <span className={isWin ? "outcome" : "outcome loss"}>{isWin ? "WIN" : "LOSS"}</span>
                         </>
                     )}

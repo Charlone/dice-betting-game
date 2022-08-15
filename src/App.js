@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import Game from "./pages/Game";
 import History from "./pages/History";
+import 'react-toastify/dist/ReactToastify.css';
 import "./styles/App.scss";
 
 const App = () => {
