@@ -5,6 +5,7 @@ import Header from "../components/common/Header";
 
 const History = ({balance, username}) => {
     // state vars needed by the component
+    // state variable holding the bet history of the player
     const [betHistory, setBetHistory] = useState([]);
     // set the start balance to reconstruct the balances at each play
     const userStartBalance = localStorage.getItem('start-balance');
@@ -52,7 +53,7 @@ const History = ({balance, username}) => {
     const HistoryDataTable = ({betHistory}) => {
         let data = [];
 
-        // looping over the bet data and setting html to be injected in componenet
+        // looping over the bet data and setting html to be injected in component
         betHistory.forEach((row, index) => {
             data.push(
                 <tr className={"table-row"} key={index}>

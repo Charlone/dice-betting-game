@@ -3,10 +3,10 @@ import Button from "../components/common/Button";
 import Header from "../components/common/Header";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import { setToast } from "../components/common/Toast";
 import logo from "../assets/dice-logo.svg";
 import minus from "../assets/minus.svg";
 import plus from "../assets/plus.svg";
-import {setToast} from "../components/common/Toast";
 
 const Game = ({username, balance}) => {
     // state vars needed for component
@@ -59,6 +59,7 @@ const Game = ({username, balance}) => {
         if (balance >= (betAmount + 1)) {
             setBetAmount(betAmount + 1);
         } else {
+            // alert the user
             setToast('error', 'Not enough balance to increment bet');
         }
     }
@@ -69,6 +70,7 @@ const Game = ({username, balance}) => {
         if (betAmount > 1 && balance > 0) {
             setBetAmount(betAmount - 1)
         } else {
+            // alert the user
             setToast('error', 'Bet amount cannot be less than 1');
         }
     }
@@ -90,8 +92,11 @@ const Game = ({username, balance}) => {
         try {
             await axios.post("http://localhost:3000/roll-dice/", data)
                 .then(function (response) {
+                    // setting the dice to show as the outcome
                     setDice(response.data.result === 'LOST' ? response.data.sideGenerated : diceFace.value);
+                    //setting if the player won
                     setIsWin(response.data.result === "WON");
+                    // since stake is immediately reduced from balance we are also subtracting it directly
                     setWinAmount(((betAmount * 5) - betAmount));
                 })
         } catch (e) {
